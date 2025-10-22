@@ -1,0 +1,26 @@
+{
+  "manifest_version": "0.2",
+  "name": "mcp-google-vertex",
+  "version": "1.0.0",
+  "description": "MCP server for Google Vertex AI image and video generation",
+  "author": {
+    "name": "Sven Stadhouders"
+  },
+  "server": {
+    "type": "node",
+    "entry_point": "build/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": [
+        "${__dirname}/build/index.js"
+      ],
+      "env": {}
+    }
+  },
+  "tools": [
+    {
+      "name": "Tool"
+    }
+  ],
+  "license": "MIT"
+}

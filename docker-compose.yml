@@ -1,0 +1,15 @@
+name: mcp-google-vertex
+
+services:
+  app:
+    image: mcp-google-vertex:latest
+    ports:
+      - "${PORT_DOCKER:-3000}:${PORT:-3000}"
+    volumes:
+      - ./generated:/usr/src/app/generated
+    env_file:
+      - .env
+    security_opt:
+      - no-new-privileges:true
+# volumes:
+#   generated-files:

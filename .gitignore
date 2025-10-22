@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build output
+build/
+dist/
+.vite/
+
+# Environment files
+.env
+.env.local
+
+# Generated files
+generated/
+*.jpg
+*.png
+*.mp4
+*.webm
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Credentials
+*credentials*.json
+service-account*.json
