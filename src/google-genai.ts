@@ -294,7 +294,7 @@ export class GoogleGenAIService {
   async getAvailableModels(): Promise<string[]> {
     try {
       const pager = await this.genAI.models.list();
-      return pager.page.map((model: any) => model.name || '').filter(Boolean) || [];
+      return pager.page.map((model) => model.name || '').filter(Boolean) || [];
     } catch (error) {
       throw new Error(`Failed to retrieve available models: ${error}`);
     }
@@ -303,7 +303,7 @@ export class GoogleGenAIService {
   /**
    * Cancel a video generation operation
    */
-  async cancelVideoOperation(operationName: string): Promise<void> {
+  async cancelVideoOperation(): Promise<void> {
     try {
       // Note: The API doesn't provide a direct cancel method in the current types
       // This would need to be implemented when the API supports it
@@ -318,10 +318,10 @@ export class GoogleGenAIService {
    */
   async getVideoOperationStatus(operationName: string): Promise<any> {
     try {
-      // Create a mock operation to use as parameter
-      const mockOperation = { name: operationName } as any;
       const operation = await this.genAI.operations.getVideosOperation({
-        operation: mockOperation,
+        operation: {
+          name: operationName,
+        } as any,
       });
 
       return {

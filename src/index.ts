@@ -116,7 +116,7 @@ async function main() {
       try {
         const options: ImageGenerationOptions = {
           numberOfImages,
-          aspectRatio: aspectRatio as any,
+          aspectRatio,
           negativePrompt,
           guidanceScale,
           seed,
@@ -267,8 +267,8 @@ async function main() {
         const options: VideoGenerationOptions = {
           numberOfVideos,
           durationSeconds,
-          aspectRatio: aspectRatio as any,
-          resolution: resolution as any,
+          aspectRatio,
+          resolution,
           fps,
           seed,
           negativePrompt,
