@@ -4,8 +4,8 @@ A Model Context Protocol (MCP) server that provides AI-powered image and video g
 
 ## Features
 
-- 🎨 **Image Generation**: Create AI images using Google's Imagen 4 model
-- 🎬 **Video Generation**: Generate AI videos using Google's Veo 3.1 model
+- 🎨 **Image Generation**: Create AI images using Google's Imagen model
+- 🎬 **Video Generation**: Generate AI videos using Google's Veo model
 - 💾 **Local Storage**: Automatically save generated content to local server storage
 - 🔒 **Secure Configuration**: Environment-based configuration for API credentials
 - 🚀 **Express v5**: Built on the latest Express framework
@@ -22,7 +22,7 @@ A Model Context Protocol (MCP) server that provides AI-powered image and video g
 
 ### generate-image
 
-Generate AI images using the Imagen 4 model (`imagen-4.0-generate-001`).
+Generate AI images using the configured Imagen model (set via `VERTEX_AI_IMAGE_MODEL`).
 
 **Parameters:**
 
@@ -53,7 +53,7 @@ Generate AI images using the Imagen 4 model (`imagen-4.0-generate-001`).
 
 ### generate-video
 
-Generate AI videos using the Veo 3.1 model (`veo-3.1-generate-001`).
+Generate AI videos using the configured Veo model (set via `VERTEX_AI_VIDEO_MODEL`).
 
 **Parameters:**
 
