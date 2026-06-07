@@ -190,25 +190,23 @@ async function main() {
           .default(1)
           .describe('Number of videos to generate (1-4)'),
         durationSeconds: z
-          .number()
-          .min(4)
-          .max(8)
+          .union([z.literal(4), z.literal(6), z.literal(8)])
           .optional()
           .default(8)
-          .describe('Duration of the video in seconds (4 or 6 or 8)'),
+          .describe('Duration of the video in seconds (4, 6, or 8)'),
         aspectRatio: z.enum(['16:9', '9:16']).optional().describe('Aspect ratio for the video'),
         resolution: z
           .enum(['720p', '1080p'])
           .optional()
           .default('720p')
           .describe('Video resolution'),
-        fps: z.number().min(8).max(30).optional().default(30).describe('Frames per second (8-30)'),
+        fps: z.number().min(8).max(24).optional().default(24).describe('Frames per second (8-24)'),
         seed: z.number().optional().describe('Random seed for reproducible generation'),
         negativePrompt: z.string().optional().describe('Things to avoid in the video'),
         enhancePrompt: z
           .boolean()
           .optional()
-          .default(false)
+          .default(true)
           .describe('Whether to enhance the prompt automatically'),
         generateAudio: z
           .boolean()
