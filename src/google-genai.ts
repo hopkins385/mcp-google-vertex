@@ -1,3 +1,4 @@
+import { Storage } from '@google-cloud/storage';
 import {
   GenerateImagesConfig,
   GenerateVideosConfig,
@@ -269,9 +270,23 @@ export class GoogleGenAIService {
   }
 
   async downloadGcsFile(gcsUri: string): Promise<Buffer> {
-    // Placeholder for GCS file download logic
-    // In a real implementation, use @google-cloud/storage to download the file
-    throw new Error(`GCS file download not implemented. Cannot download from ${gcsUri}`);
+    // Parse gs://bucket-name/path/to/file
+    const match = gcsUri.match(/^gs:\/\/([^/]+)\/(.+)$/);
+    if (!match) {
+      throw new Error(`Invalid GCS URI format: ${gcsUri}`);
+    }
+    const [, bucketName, filePath] = match;
+
+    const storage = new Storage({
+      projectId: CONFIG.googleVertex.project,
+      credentials: {
+        client_email: CONFIG.googleVertex.clientEmail,
+        private_key: CONFIG.googleVertex.privateKey,
+      },
+    });
+
+    const [contents] = await storage.bucket(bucketName).file(filePath).download();
+    return contents;
   }
 
   /**
