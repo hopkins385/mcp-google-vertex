@@ -1,7 +1,5 @@
 {
   "upgrade": false,
   "interactive": true,
-  "reject": [
-    "zod"
-  ]
+  "reject": []
 }
