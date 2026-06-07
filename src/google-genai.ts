@@ -241,10 +241,7 @@ export class GoogleGenAIService {
         }
 
         if (videoData.uri) {
-          // If using GCS URI, we would need to download it
-          console.error('videoData.uri found, but GCS download not implemented.', videoData.uri);
-          const gcsUri = videoData.uri;
-          const videoBuffer = await this.downloadGcsFile(gcsUri);
+          const videoBuffer = await this.downloadGcsFile(videoData.uri);
           videoBuffers.push(videoBuffer);
         }
 
