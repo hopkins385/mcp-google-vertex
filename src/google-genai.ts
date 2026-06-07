@@ -152,7 +152,7 @@ export class GoogleGenAIService {
       durationSeconds = 8,
       aspectRatio = '16:9',
       resolution = '720p',
-      fps,
+      fps = 24,
       seed,
       negativePrompt,
       enhancePrompt = false,
@@ -458,7 +458,7 @@ export class GoogleGenAIService {
       throw new Error(`aspectRatio must be one of: ${validAspectRatios.join(', ')}`);
     }
 
-    const validResolutions = ['720p', '1080p'];
+    const validResolutions = ['720p', '1080p', '4K'];
     if (!validResolutions.includes(resolution)) {
       throw new Error(`resolution must be one of: ${validResolutions.join(', ')}`);
     }
@@ -516,7 +516,7 @@ export interface VideoGenerationOptions {
   /** Aspect ratio of the generated video */
   aspectRatio?: '16:9' | '9:16';
   /** Resolution of the generated video */
-  resolution?: '720p' | '1080p';
+  resolution?: '720p' | '1080p' | '4K';
   /** Frames per second (8-30) */
   fps?: number;
   /** Random seed for video generation */

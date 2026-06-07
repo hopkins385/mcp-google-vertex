@@ -71,7 +71,7 @@ async function main() {
           .describe('Aspect ratio for the image'),
         imageSize: z
           .enum(['1K', '2K'])
-          .default('1K')
+          .default('2K')
           .optional()
           .describe('Size of the generated image'),
         outputMimeType: z
@@ -194,13 +194,25 @@ async function main() {
           .optional()
           .default(8)
           .describe('Duration of the video in seconds (4, 6, or 8)'),
-        aspectRatio: z.enum(['16:9', '9:16']).optional().describe('Aspect ratio for the video'),
-        resolution: z
-          .enum(['720p', '1080p'])
+        aspectRatio: z
+          .enum(['16:9', '9:16'])
+          .default('16:9')
           .optional()
-          .default('720p')
+          .describe('Aspect ratio for the video'),
+        resolution: z
+          .enum(['720p', '1080p', '4K'])
+          .optional()
+          .default('1080p')
           .describe('Video resolution'),
-        fps: z.number().min(8).max(24).optional().default(24).describe('Frames per second (8-24)'),
+        fps: z
+          .number()
+          .min(8)
+          .max(24)
+          .optional()
+          .default(24)
+          .describe(
+            '@deprecated fps is deprecated and defaults to 24fps. Frames per second (8-24)',
+          ),
         seed: z.number().optional().describe('Random seed for reproducible generation'),
         negativePrompt: z.string().optional().describe('Things to avoid in the video'),
         enhancePrompt: z
