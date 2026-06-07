@@ -1,6 +1,6 @@
 {
   "name": "mcp-google-vertex",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "MCP server for Google Vertex AI image and video generation",
   "keywords": [
     "google",

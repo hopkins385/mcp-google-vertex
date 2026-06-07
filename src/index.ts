@@ -46,7 +46,7 @@ async function main() {
   // Create MCP server
   mcpServer = new McpServer({
     name: 'mcp-google-vertex',
-    version: '0.4.2',
+    version: '0.4.3',
   });
 
   // Register image generation tool
