@@ -14,7 +14,7 @@ A Model Context Protocol (MCP) server that provides AI-powered image and video g
 
 ## Prerequisites
 
-- Node.js 22.0.0 or higher
+- Node.js 24.0.0 or higher
 - Google Cloud Project with Vertex AI API enabled
 - Service account credentials with appropriate permissions
 
