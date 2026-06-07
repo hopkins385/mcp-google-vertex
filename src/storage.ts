@@ -1,7 +1,7 @@
-import { existsSync } from "fs";
-import { mkdir, writeFile } from "fs/promises";
-import { dirname, join } from "path";
-import { CONFIG } from "./config.js";
+import { existsSync } from 'fs';
+import { mkdir, writeFile } from 'fs/promises';
+import { dirname, join, resolve } from 'path';
+import { CONFIG } from './config.js';
 
 /**
  * Storage utility for saving generated images and videos locally
@@ -29,7 +29,7 @@ export class StorageService {
     const filePath = join(this.storagePath, filename);
     await this.ensureDirectory(filePath);
     await writeFile(filePath, data);
-    return filePath;
+    return resolve(filePath);
   }
 
   /**
@@ -39,7 +39,7 @@ export class StorageService {
     const filePath = join(this.storagePath, filename);
     await this.ensureDirectory(filePath);
     await writeFile(filePath, data);
-    return filePath;
+    return resolve(filePath);
   }
 
   /**
@@ -48,15 +48,15 @@ export class StorageService {
   async saveText(text: string, filename: string): Promise<string> {
     const filePath = join(this.storagePath, filename);
     await this.ensureDirectory(filePath);
-    await writeFile(filePath, text, "utf-8");
-    return filePath;
+    await writeFile(filePath, text, 'utf-8');
+    return resolve(filePath);
   }
 
   /**
    * Generate unique filename with timestamp
    */
   generateFilename(prefix: string, extension: string): string {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const random = Math.random().toString(36).substring(2, 8);
     return `${prefix}_${timestamp}_${random}.${extension}`;
   }
