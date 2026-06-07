@@ -4,8 +4,8 @@ A Model Context Protocol (MCP) server that provides AI-powered image and video g
 
 ## Features
 
-- 🎨 **Image Generation**: Create AI images using Google's Imagen 3 model
-- 🎬 **Video Generation**: Generate AI videos using Google's Veo model
+- 🎨 **Image Generation**: Create AI images using Google's Imagen 4 model
+- 🎬 **Video Generation**: Generate AI videos using Google's Veo 3.1 model
 - 💾 **Local Storage**: Automatically save generated content to local server storage
 - 🔒 **Secure Configuration**: Environment-based configuration for API credentials
 - 🚀 **Express v5**: Built on the latest Express framework
@@ -20,17 +20,23 @@ A Model Context Protocol (MCP) server that provides AI-powered image and video g
 
 ## MCP Tools
 
-### Generate Image
+### generate-image
 
-Generate AI images using the Imagen model.
+Generate AI images using the Imagen 4 model (`imagen-4.0-generate-001`).
 
 **Parameters:**
 
-- `prompt` (required): Text description of the image to generate
-- `aspectRatio` (optional): Image aspect ratio (`1:1`, `16:9`, `9:16`, `4:3`, `3:4`), default: `1:1`
-- `imageSize` (optional): Image size (`1K`, `2K`), default: `1K`
-- `outputMimeType` (optional): Output image format (`image/png`, `image/jpeg`), default: `image/jpeg`
-- `negativePrompt` (optional): Things to avoid in the image
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `prompt` | string | required | Text description of the image to generate |
+| `numberOfImages` | number (1-8) | `1` | Number of images to generate |
+| `aspectRatio` | `1:1` \| `3:4` \| `4:3` \| `9:16` \| `16:9` | `1:1` | Aspect ratio |
+| `imageSize` | `1K` \| `2K` | `1K` | Output resolution |
+| `outputMimeType` | `image/png` \| `image/jpeg` | `image/png` | Output format |
+| `negativePrompt` | string | — | Things to avoid in the image |
+| `guidanceScale` | number (1-20) | — | How closely the model follows the prompt |
+| `seed` | number | — | Random seed for reproducible results |
+| `enhancePrompt` | boolean | `false` | Auto-enhance the prompt before generation |
 
 **Example:**
 
@@ -39,32 +45,69 @@ Generate AI images using the Imagen model.
   "name": "generate-image",
   "arguments": {
     "prompt": "A serene mountain landscape at sunset with a lake",
-    "aspectRatio": "16:9"
+    "aspectRatio": "16:9",
+    "numberOfImages": 2
   }
 }
 ```
 
-### Generate Video
+### generate-video
 
-Generate AI videos using the Veo model.
+Generate AI videos using the Veo 3.1 model (`veo-3.1-generate-001`).
 
 **Parameters:**
 
-- `prompt` (required): Text description of the video to generate
-- `duration` (optional): Video duration in seconds (4,6,8), default: 8
-- `aspectRatio` (optional): Video aspect ratio (`16:9`, `9:16`)
-- `resolution` (optional): Video resolution (`720p`, `1080p`)
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `prompt` | string | required | Text description of the video to generate |
+| `numberOfVideos` | number (1-4) | `1` | Number of videos to generate |
+| `durationSeconds` | number (4-8) | `8` | Clip length in seconds (4, 6, or 8) |
+| `aspectRatio` | `16:9` \| `9:16` | `16:9` | Aspect ratio |
+| `resolution` | `720p` \| `1080p` | `720p` | Video resolution |
+| `fps` | number (8-30) | `30` | Frames per second |
+| `seed` | number | — | Random seed for reproducible results |
+| `negativePrompt` | string | — | Things to avoid in the video |
+| `enhancePrompt` | boolean | `false` | Auto-enhance the prompt before generation |
+| `generateAudio` | boolean | `false` | Generate audio alongside the video |
+| `lastFrame` | string | — | Image to use as the last frame (image-to-video) |
+| `referenceImages` | array | — | Reference images to guide generation (see below) |
 
-**Example:**
+**Reference images** (`lastFrame` and `referenceImages[].image`) accept a plain string:
+- Local file path: `/path/to/image.png`
+- Cloud Storage URI: `gs://my-bucket/image.jpg`
+- Public URL: `https://cdn.example.com/image.jpg`
+
+Supported formats: JPEG, PNG. Maximum size: 10 MB.
+
+`referenceImages` supports up to 3 `ASSET` images or 1 `STYLE` image (Veo 2 only).
+
+**Example — text to video:**
 
 ```json
 {
   "name": "generate-video",
   "arguments": {
     "prompt": "A butterfly flying through a garden of flowers",
-    "duration": 8,
+    "durationSeconds": 8,
     "aspectRatio": "16:9",
     "resolution": "1080p"
+  }
+}
+```
+
+**Example — image reference:**
+
+```json
+{
+  "name": "generate-video",
+  "arguments": {
+    "prompt": "The product spinning on a white background",
+    "referenceImages": [
+      {
+        "image": "/path/to/product.png",
+        "referenceType": "ASSET"
+      }
+    ]
   }
 }
 ```
@@ -82,9 +125,10 @@ Add to your `claude_desktop_config.json`:
       "command": "npx",
       "args": [
         "mcp-remote",
-        "http://localhost:3000/mcp"
+        "http://localhost:3005/mcp"
       ]
     }
+  }
 }
 ```
 
@@ -97,7 +141,7 @@ Add to your `.vscode/mcp.json`:
   "servers": {
     "google-vertex": {
       "type": "http",
-      "url": "http://localhost:3000/mcp"
+      "url": "http://localhost:3005/mcp"
     }
   }
 }
@@ -111,7 +155,7 @@ Test your server with the MCP Inspector:
 npx @modelcontextprotocol/inspector
 ```
 
-Then connect to: `http://localhost:3000/mcp`
+Then connect to: `http://localhost:3005/mcp`
 
 ## Architecture
 
@@ -119,8 +163,8 @@ The server follows clean architecture principles with separation of concerns:
 
 - **Config Layer**: Environment variable management and validation
 - **Service Layer**: Vertex AI integration and storage management
+- **Tools Layer**: Shared utilities (e.g. reference image resolution)
 - **Server Layer**: MCP protocol implementation and Express server setup
-- **DRY Principles**: Reusable utilities and shared type definitions
 
 ## Error Handling
 
@@ -132,7 +176,6 @@ The server includes comprehensive error handling:
 
 ## Performance Tips
 
-- Generated files are cached locally to avoid redundant API calls
 - Use appropriate aspect ratios and resolutions for your use case
 - Monitor Vertex AI quotas and billing
 - Consider implementing request queuing for high-traffic scenarios
